@@ -1,0 +1,508 @@
+@font-face {
+  font-family: '楷体1';
+  src: url('file/font/kaiti.woff');
+}
+body {
+	margin: 0;
+	overflow: hidden;
+	background: #000000;
+}
+app {
+	position: absolute;
+	left: calc(50% - 683px);
+	top: calc(50% - 330.5px);
+	overflow: hidden;
+	display: block;	
+	width: 1366px;
+	height: 661px;
+	background:url('file/img/background.jpg') no-repeat;
+	background-size:1366px;
+	z-index: 0;
+	user-select: none;
+}
+.room {
+	position: absolute;
+	left : 56px;
+	right: 66px;
+	/*width: 1188px;*/
+	top : 0px;
+	color: #b49257;
+	background: #000000;
+	padding: 5px 10px 6px 20px;
+	opacity: 0.7;
+	font-size: 15px;
+	z-index: 60;
+	white-space: nowrap;
+}
+.room span {
+	display: inline-block;
+	margin: 0px 12px 0px 0px;
+}
+
+.player {
+	position: absolute;
+	display: inline-block;
+	font-size: 12px;
+	height: 160px;
+	user-select: none;
+}
+
+.player .skin:hover {
+	box-shadow: 0px 0px 12px 7px red;
+}
+.player .skin {
+	position: relative;
+	display: inline-block;
+	height: 160px;
+	width: 136.98px;
+	cursor: pointer;
+	background: #eeeeee33;
+	z-index: 200;
+}
+.player .pdiv {
+	position: absolute;
+	font-size: 16px;
+	color : #fff;
+	opacity: 0.9;
+	text-align: center;
+	z-index: 200;
+}
+.opPlayer {
+	box-shadow: 0px 0px 12px 7px green;
+}
+.currentPlayer {
+	box-shadow: 0px 0px 12px 9px #ffcc00;
+}
+.deathPlayer .pdiv, .deathPlayer .skin{	
+	filter: grayscale(100%);
+}
+.player .saveMe {
+	top: 38px;
+  left: 20px;
+}
+.player .death {
+	top: 46px;
+  left: 10px;
+  z-index: 300;
+	filter: grayscale(0%);
+	pointer-events: none ;
+}
+.player .death img {
+	width:120px;
+}
+.player .name {
+	font-size: 16px;
+	font-family: "楷体1";
+	top: 0px;
+	left:0px;
+	width: 18px;
+	min-height: 54px;
+	padding: 36px 2px 12px 2px;
+	text-shadow: 2px 2px 2px #cd1616;
+	cursor: pointer;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+}
+.player .name:hover{
+	font-size: 18px;
+}
+.player .role {
+	font-size: 12px;
+	top: -2px;
+	right : -2px;
+	width: 24px;
+	padding: 4px 3px 6px 3px;
+}
+.player .kingdom {
+	font-size: 22px;
+	font-family: "楷体1";
+	top: -6px;
+	left : -6px;
+	width: 22px;
+	height: 22px;
+	padding: 7px 7px 7px 7px;
+	border-radius: 20px;
+}
+.player .handcardNum {
+	font-size: 12px;
+	width: 28px;
+	min-height: 17px;
+	left : -4px;
+	top : 141px;
+	padding: 1px 1px 1px 1px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.player .position {
+	width: 100%;
+	font-size: 14px;
+	font-family: "楷体1";
+	bottom : -20px;
+	text-shadow: 2px 2px 3px red;
+	padding: 0px;
+}
+.player .beharm {
+	width: 100px;
+	font-size: 60px;
+	color: red;
+	top: 60px;
+	left: 13px;	
+	user-select: none;
+	z-index: 500;
+	text-shadow: 1px 1px 3px #d6aaaa;
+	text-align: center;
+}
+.player .killNum {
+	opacity: 0;
+	top: 0px;
+	left: 148px;
+	font-size: 14px;
+}
+.currentPlayer .killNum {
+	opacity: 0.8;
+}
+.player .blood {
+	display: inline;
+	right : 0px;
+	bottom : 0px;
+	padding: 1px 0px 1px 0px;
+	background: #000000;
+}
+.player .blood img {
+	display: block;
+	background: #000000;
+	width: 16px;
+	padding: 0px 1px;
+	margin: auto;
+}
+.player .blood num {
+	display: block;
+	background: #000000;
+	padding: 0px 3px 0px 0px;
+	text-align: center;
+}
+
+.player .equipArea {
+	display: block;
+	position: absolute;
+	top:88px;
+	left : 23px;	
+	cursor: pointer;
+	z-index: 400;
+}
+
+.equipCard {
+	width: 75px;
+	padding: 1px 10px;
+	font-size: 11px;
+	color : #fff;
+	background: #000;
+	opacity: 0.63;
+	z-index: 450;
+	border-radius: 5px;
+	position: absolute;
+	white-space: nowrap;
+}
+.equipCard0 {
+	top:0px;
+}
+.equipCard1 {
+	top:18px;
+}
+.equipCard2 {
+	top:36px;
+}
+.equipCard3 {
+	top:54px;
+}
+
+.equipCard:hover {
+	box-shadow: 0px 0px 4px 3px #97650a;
+	z-index: 500;
+	border: 1px solid #97650a;
+	padding: 0px 9px;
+}
+
+.player .handArea, .room .handArea {
+	display: block;
+	position: absolute;
+	top:0px;
+	cursor: pointer;
+	z-index: 400;
+	height: 100px;
+}
+.room .handArea {
+	left : 362px;
+	top : 280px;
+}
+
+.handArea .card {
+	display: inline-block;
+	position: absolute;
+	width: 68.95px;
+	height: 100px;
+	z-index: 400;
+}
+.handArea .card:hover{
+	z-index: 500;
+	box-shadow: 0px 0px 8px 3px #97650a;
+}
+.handArea .img {
+	position: absolute;
+	height: 100px;
+}
+.handArea .img:hover {
+}
+.handArea .suit {
+	position: absolute;
+	left:2px;
+	top :15.6px;
+	height: 12px;
+}
+.handArea .num {
+	position: absolute;
+	left:-1.6px;
+	top :0px;
+	height: 24px;
+}
+
+.mainView .handArea {
+	display: block !important;
+	top : 60px;
+	left : -946px;
+}
+.mainView .handArea .card {
+	transition: left 0.666s;
+}
+.skill {
+	width: auto;
+	font-size: 14px;
+	font-family: "楷体1";
+	bottom: 0px;
+	text-shadow: 2px 2px 3px gray;
+	padding: 0px;
+	display: none;
+	right: 148px;
+  text-align: right !important;
+}
+.mainView .skill {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+.skill skill {	
+	white-space: nowrap;
+	display: block;
+  border-radius: 5px;
+  width: fit-content;
+  padding: 3px 6px;
+  margin: 1px 0px 0px 0px;
+  font-size: 23px;
+	color : #ffffff;
+  border: 1px solid #545252;
+	background: linear-gradient(to bottom, #6b6868, #c3c3be);
+}
+.skill .activeSkill {
+	color : #ffffff;
+	background: linear-gradient(to bottom, #33a525, #50662c);
+	border:1px solid #33a525;
+  cursor: pointer;
+}
+
+menu {
+	display: inline-block;
+	position: absolute;
+	top:0px;
+	width: 1366px;
+	height: 661px;
+	z-index: 50;
+}
+.selectGeneral {
+	position: absolute;
+	width: 960px;
+	min-height: 373px;
+	left: calc(50% - 500px);
+	top : 50px;
+	background: #000000;
+	padding: 20px 20px 10px 20px;
+	border-radius: 10px;
+}
+.general {
+	display: inline-block;
+	margin: 4px;
+	user-select: none;
+}
+.general:hover {
+	box-shadow: 0px 0px 8px 5px yellow;	
+}
+.general .skin {
+	display: inline-block;
+	width: 110px;
+	min-height: 128px;
+	max-height: 128.47px;
+	background: #eeeeee33;
+	cursor: pointer;
+}
+.general .name {
+	position: absolute;
+	font-size: 16px;
+	color : #fff;
+	opacity: 0.9;
+	text-align: center;
+	font-size: 16px;
+	font-family: "楷体1";
+	margin-top: -120px;
+	width: 18px;
+	min-height: 54px;
+	padding: 12px 2px 12px 2px;
+	text-shadow: 2px 2px 2px #cd1616;
+	cursor: pointer;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+}
+.general .blood {
+	display: flex;
+}
+.general .blood img{
+	width: 16px;
+}
+.general .blood num{
+	color: #519248;
+	width: 16px;
+}
+.general .win {
+	position: absolute;
+	display: inline-block;
+	font-size: 10px;
+	color : #ffffff99;
+	margin-top: -18px;
+	margin-left: 73px;
+	width:37.45px;
+	text-align: right;
+}
+.selectGeneral .allBtn {
+	width: 100%;
+	text-align: center;
+	display: flex;
+	margin: 0;
+	padding: 10px;
+	position : absolute;
+	bottom : 10px;
+}
+.selectGeneral .btn {
+	width: 100px;
+	background: #008000;
+	color: #fff;
+	text-align: center;
+	border-radius: 10px;
+	padding: 4px 5px 6px 5px;
+	cursor: pointer;
+	margin: auto;
+	user-select: none;
+}
+.selectGeneral .btn:hover {
+	background: #044304;
+}
+
+.selectBtn {
+	position: absolute;
+	width: 880px;
+	left: calc(50% - 465px);
+	top : 410px;
+	display: flex;
+	justify-content:center;
+}
+
+.selectBtn input {
+	padding: 6px 11px 6px 11px;
+	margin: 2px 13px;
+	font-family: '楷体1';
+	font-size: 30px;
+	color: #b5652a;
+	border-radius: 5px;
+	border: 0px solid #b5652a;
+	cursor: pointer;
+	background: #fff;
+}
+.selectBtn input:hover {
+	background: #e9d1d1;
+}
+
+.selectCard {
+	margin-top: -20px;
+	box-shadow: 0px 0px 8px 3px #97650a;
+}
+.selectTarget {
+	box-shadow: 0px 0px 12px 7px blue;
+}
+
+.skillTitle {
+	position: absolute;
+	bottom: 41px;
+	font-size: 18px;
+	color: #fff;
+	padding-left: 10px;
+	text-align: center;
+}
+
+msg {
+	display: block;
+	position: absolute;
+	background: #000000;
+	color:#fff;
+	left : 920px;
+	top : 246px;
+	width: 205px;
+	height: 154.5px;
+	overflow-y: auto;
+	z-index: 100;
+	cursor: pointer;
+	padding: 2px 5px;
+	border-radius: 5px;
+	font-size: 12px;
+	opacity: 0.77;
+}
+msg::-webkit-scrollbar {
+			   width: 8px;
+			}
+msg::-webkit-scrollbar-thumb {
+	background-color: #582b0a;
+	-webkit-border-radius: 2em;
+	-moz-border-radius: 2em;
+	border-radius: 2em;
+}
+msg::-webkit-scrollbar-track-piece {
+	background-color: #716257d9;
+	/*-webkit-border-radius: 2em;*/
+	/*-moz-border-radius: 2em;*/
+	/*border-radius: 2em;*/
+}
+
+.useAI, .useAISelf, .useBtn {
+	user-select: none;
+	cursor: pointer;
+}
+.useBtn:hover {
+	color:red;
+}
+.model {
+	position: absolute;
+	display: block;
+	left: 60px;
+	top : 30px;
+	padding: 0px 0px 4px 0px;
+	z-index: 900;
+	background: #000000aa;
+}
+.model .name {
+	color:#fff;
+	padding: 5px 6px;
+	min-width: 58px;
+	text-align: center;
+	cursor: pointer;
+}
+.model .name:hover {
+	color: red;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src='../js/common/jquery.lgwind.1.0.0.js'></script>
+	</head>
+	<body>
+		<script>
+			let version='未获取版本号';
+			let url1 = '../js/common/version.js?v='+Math.random();
+			//获取版本号
+			$.ajax({
+				"url" : url1,
+				"type" : "get",
+				"async" : false,//同步
+				'success' : (e) => {
+					version = e.responseText;
+				},
+			});
+			let url2 = '../../mingKill/ming/skill.js?version='+Math.random();
+//			let url2 = '../js/common/ai.js?version='+Math.random();
+			$('body').append("版本号2："+version);
+					$('body').append('<br>');
+			$('body').append("链接1："+url1);
+					$('body').append('<br>');
+			$('body').append("链接2："+url2);
+			
+			$.ajax({
+				"url" : url2,
+				"type" : "get",
+				"async" : false,//同步
+				'success' : (e) => {
+					$('body').append('<br>');
+					let data = e.responseText;
+					data = data.split("\n");
+					data.forEach(d=>{
+						$('body').append(d);
+					$('body').append('<br>');
+					});
+				},
+			});
+		</script>
+	</body>
+</html>

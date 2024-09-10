@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="referrer" content="no-referrer" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+		<title>Card Show</title>
+		<link rel="icon" href="../file/img/han.png" type="image/x-icon">
+		<script src='../js/common/jquery.lgwind.1.0.0.js'></script>
+		<script src='../js/card.js'></script>
+		<script src='../js/common/img.js'></script>
+		<script src='../js/common/alert.js'></script>
+		<script src='/earthKillExtends/room/img.js'></script>
+		<script src='/earthKillExtends/room/imgCard.js'></script>
+		<style>
+			body {
+				display: none;
+				margin: 0;
+			}
+			#search {
+				width: 300px;
+				padding: 10px;
+				border: 1px solid #ccc;
+			}
+			#searchBtn {
+				color: #fff;
+				width: 100px;
+				font-size: 18px;
+				padding: 5px 10px 9px 10px;
+				background: red;
+				border: 1px solid red;
+				border-radius: 10px;
+				cursor: pointer;
+			}
+			.cards {
+				display: inline-block;
+				user-select: none;
+			}
+			.card {
+				height: 120px;
+				margin: 2px;
+				cursor: pointer;
+			}
+			.suit {
+				position: absolute;
+				height: 14px;
+				margin-left: -83px;
+				margin-top: 20px;
+			}
+			.num {
+				position: absolute;
+				height: 26px;
+				margin-left: -86.2px;
+				margin-top: 2.8px;
+			}
+			body::-webkit-scrollbar {
+			   width: 8px;
+			}
+			body::-webkit-scrollbar-thumb {
+			  background-color: #38444b;
+			  -webkit-border-radius: 2em;
+			  -moz-border-radius: 2em;
+			  border-radius: 2em;
+			}
+			body::-webkit-scrollbar-track-piece {
+			  background-color: #c9c0c0;
+			  /*-webkit-border-radius: 2em;*/
+			  /*-moz-border-radius: 2em;*/
+			  /*border-radius: 2em;*/
+			}
+			@media all and (max-width: 650px) {				
+				#search {
+					width: 116px;
+				}
+				alert {
+					left : 0px !important;
+					right : 0px !important;
+					width: calc(100% - 40px) !important;
+				}
+			}
+			alert {
+				position: fixed !important;
+			}
+		</style>
+	</head>
+	<body>
+		<app>
+			<input id='search' type="text" /><input id='searchBtn' type="button" value="搜索" onclick="search()" /><text></text><br>
+			<cards></cards>
+		</app>
+		<script>
+			//生成所有行
+			['A',2,3,4,5,6,7,8,9,10,'J','Q','K'].forEach(num=>{
+				let node = document.createElement('cards-'+num);
+				node.setAttribute('class', 'cards');
+				$("cards")[0].appendChild(node);
+			});
+			setTimeout(()=>{
+				//生成所有卡牌
+				$card.getAll().forEach(card=>{
+					$("cards-"+card.num)[0].appendChild(createCard(card));
+				});
+				$("body")[0].style.display='block';
+			},300);			
+			/**
+			 * 创建一张卡牌
+			 * @param {Object} card
+			 */
+			function createCard(card) {
+				let node = document.createElement('card');
+				node.setAttribute('name', card.name);		
+				node.setAttribute('type', card.type)		
+				//图片
+				let img = document.createElement('img');
+				img.setAttribute('class', 'card');
+				img.setAttribute('src', $img.$data[card.name]);
+				img.setAttribute('title', `${card.desc}\n\n【类型】${card.type}`);
+				node.appendChild(img);
+				$(img).on("click", (event)=>{
+					$('alert').remove();
+					let data = $(img).attr("title");
+					$alert.msg(data);
+					event.stopPropagation();
+				});
+				//花色
+				let suit = document.createElement('img');
+				suit.setAttribute('class', 'suit');
+				suit.setAttribute('src',  $img.$data['suit-'+card.suit]);
+				node.appendChild(suit);				
+				//数字
+				let num = document.createElement('img');
+				num.setAttribute('class', 'num');
+				num.setAttribute('src', $img.$data[(card.color=="红色"?'red-':"black-")+ card.num]);
+				node.appendChild(num);
+				return node;
+			}
+			/**
+			 * 搜索
+			 */
+			function search() {
+				let value = $("#search")[0].value.trim();
+				let num=0;
+				[...$('card')].forEach(elem=>{
+					let name = elem.getAttribute("name");
+					let type = elem.getAttribute("type");
+					if(("-"+name+"-"+type).includes(value)) {
+						elem.style.display='';
+						num++;
+					}else{
+						elem.style.display='none';
+					}
+				});
+				$('text')[0].innerText=' 搜索结果：'+num+"条";
+			}
+			search();
+			//键盘事件
+			document.addEventListener("keydown", function(event) {
+				// 判断按下的键是否是回车键（键码为13）
+				if(event.keyCode === 13) {
+					search();
+				}
+			});
+		</script>
+	</body>
+</html>

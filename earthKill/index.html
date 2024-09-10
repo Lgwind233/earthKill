@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+		<meta name="referrer" content="no-referrer" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+		<meta http-equiv='Content-Type' content='text/html;' charset='utf-8' />
+		<title>Earth Kill</title>
+		<link rel="icon" href="file/img/han.png" type="image/x-icon">
+		<link rel="stylesheet" href="index.css" />
+		<script src='js/common/jquery.lgwind.1.0.0.js'></script>
+		<script src='js/common/vue.lgwind.1.0.6.js'></script>
+		<script src='js/common/script.js'></script>
+	</head>
+	<body>
+		<app>
+			<div class='room'>	
+				<!-- 顶部信息 -->
+				<span class='useBtn modelBtn'>模式</span>
+				<span>回合：{{room.currentRoundPlayer=='room'?"房间":player[room.currentRoundPlayer].cName}}</span>
+				<span>摸牌堆：{{room.cardPileGet.length}}</span>
+				<span>弃牌堆：{{room.cardPileLose.length}}</span>
+				<span>洗牌次数：{{room.shuffleCardNum  }}</span>
+				<span>轮数：{{room.TurnNum  }}</span>
+				<span>游戏时间：{{getGameTime()}}</span>
+				<span class='useBtn useAI' :style='room.useAI?"color:#f44336":""'>使用AI：{{room.useAI?"是":"否"  }}</span>
+				<span class='useBtn useAISelf' :style='room.useAISelf?"color:#f44336":""'>托管：{{room.useAISelf?"是":"否"   }}</span>
+				<span class='useBtn' @click="openCard()">卡牌</span>
+				<span class='useBtn' @click="openPlayer()">武将</span>
+				<span class='useBtn' @click="openHelp()">帮助</span>
+				<span class='useBtn' @dblclick="saveGame()">存储</span>
+				<span class='useBtn' @dblclick="loadGame()">加载</span>
+				<span class='useBtn' @dblclick='restartGame()' title='双击重启游戏'>重启游戏</span>
+				<!-- 弃牌堆 -->
+				<div class='handArea' :style="getCardPileLeft()">
+					<div v-for='cardNum,cardIndex in getCardPileLose()' :class="'card '+ 'discard'+cardNum" :style="'left:'+cardIndex*68.95+'px;'" :title="getCard(cardNum).desc"@dblclick="$alert.msg(getCard(cardNum).desc)">
+						<img class='img' :src="getImg(getCard(cardNum).name)"/>
+						<img class='suit' :src="getImg('suit-'+getCard(cardNum).suit)"/>
+						<img class='num' :src="getImg((getCard(cardNum).color=='红色'?'red-':'black-') +getCard(cardNum).num)"/>
+					</div>
+				</div>
+			</div>
+			<!-- 所有玩家 -->
+			<div v-for='(item,key,index) in player' :class="'player'+' player_'+key+(room.mainView%player.size()==index?' mainView':'') +(item.name==room.currentRoundPlayer?' currentPlayer':'')+(item.death?' deathPlayer':'')+(item.name==room.opPlayer?' opPlayer':'')+getSelectTarget(key)" :style='showPosition(index)'>
+				<!-- 皮肤 -->
+				<img class='skin' :src="getImg(item.name)" @click='selectTargetFunc(key)' :title='getSkillMsg(item)' @dblclick="$alert.msg(getSkillMsg(item))" />
+				<!-- 濒死状态 -->
+				<div class='pdiv saveMe' v-show="item.nearDeath">
+					<img :src="getImg('saveMe')" />
+				</div>
+				<!-- 死亡状态 -->
+				<div class='pdiv death' v-show="item.death">
+					<img :src="getImg('death')" />
+				</div>
+				<!-- 名字 -->
+				<div class='pdiv name' :style='getColorByKingdom(item)' @dblclick='changeMainView(index)'>{{item.cName}}</div>
+				<!-- 角色 -->
+				<img class='pdiv role' :src="getImg('role-'+item.role)" />
+				<!-- 势力 -->
+				<div class='pdiv kingdom' :style='getColorByKingdom(item)'>{{item.kingdom[0]}}</div>
+				<!-- 手牌数 -->
+				<div class='pdiv handcardNum' :style='getColorByKingdom(item);' @click='showHandCard(index)'>{{item.cardAreaHand.length}}</div>
+				<!-- 位置 -->
+				<div class='pdiv position' >{{getPosition(item.position, item)}}</div>
+				<!-- 伤害 -->
+				<!--<div class='pdiv beharm' >-1</div>-->
+				<!-- 杀使用次数-->
+				<div class='pdiv killNum' :title="'杀剩余使用次数：'+item.killNum" v-show='room.currentPhase=="出牌阶段"'>{{item.killNum}}</div>
+				<!-- 技能 -->
+				<div class='pdiv skill'>
+					<skill v-for='oneSkill in getInitiativeSkill(item)' 
+						@click='triggerSkill(oneSkill, item)' 
+						:class='judgeTriggerSKill(oneSkill, item)?"activeSkill":""' 
+						:title='oneSkill.desc' 
+						@dblclick='$alert.msg(oneSkill.desc)'>{{oneSkill.name}}</skill>
+				</div>
+				<!-- 体力上限 -->
+				<div class='pdiv blood'>
+					<img v-for='blood in getBlood(item.bloodMax, item)' :src="getImg('blood-0')"/>
+				</div>
+				<!-- 体力 -->
+				<div class='pdiv blood'>
+					<num v-if='item.bloodMax>5' :style='getBloodColor(item)'>{{item.blood}}</num>
+					<num v-if='item.bloodMax>5' :style='getBloodColor(item)'>/</num>
+					<num v-if='item.bloodMax>5' :style='getBloodColor(item)'>{{item.bloodMax}}</num>
+					<img v-if='item.bloodMax>5' :src="getImg('blood-'+getBloodNum(item))"/>
+					<img v-for='blood in getBlood(item.blood, item)' :src="getImg('blood-'+getBloodNum(item))"/>
+				</div>
+				<!-- 手牌区 -->
+				<div class='handArea' :style="getHandCardShow(index)?'':'z-index:0;opacity:0;'">
+					<div v-for='cardNum,cardIndex in item.cardAreaHand' 
+						:class="'card '+ 'card'+cardNum+getSelectCard(cardNum)" 
+						@click='selectCardFunc(cardNum)' 
+						:style="'left:'+cardIndex*getCardWidth(index, item)+'px;'+canSelectCard(cardNum)" 
+						:title="getCard(cardNum).desc"  
+						@dblclick="$alert.msg(getCard(cardNum).desc)">
+						<img class='img' :src="getImg(getCard(cardNum).name)"/>
+						<img class='suit' :src="getImg('suit-'+getCard(cardNum).suit)"  />
+						<img class='num' :src="getImg((getCard(cardNum).color=='红色'?'red-':'black-') +getCard(cardNum).num)"/>
+						<img class='img img0' :src="getImg('未知')" v-show='!getHandCardShow(index)'/>
+					</div>
+				</div>
+				<!-- 装备区 -->
+				<div class='equipArea'>
+					<div v-for='eCard,cardIndex in getEquipArea(item)' :class="'equipCard '+ 'equipCard'+cardIndex + ' card'+eCard.id" :title="eCard.desc" v-show='eCard.suit'   @dblclick="$alert.msg(eCard.desc)">
+						{{eCard.name+' '+eCard.suit+ eCard.num}}
+					</div>
+				</div>
+			</div>
+			<menu>
+				<!-- 选将框 -->
+				<div v-if='showSelectGeneral' class='selectGeneral'>
+					<div class='general' v-for='general,index in selectGeneral' @dblclick="selectedGeneral(general)" title='双击选将'>
+						<img class='skin' :src="getImg(general.name)" />
+						<div class='pdiv name' :style='getColorByKingdom(general)' @dblclick='changeMainView(index)'>{{general.chineseName}}</div>
+						<div class='pdiv blood'>
+							<img v-for='blood in getMagatama(general)' :src="getImg('blood-5')"/>
+							<num v-if='general.magatama>5' >&nbsp;x&nbsp;{{general.magatama}}</num>
+						</div>
+						<div class='win'>{{getWinData(general).valueShow}}</div>
+					</div>
+					<div class='allBtn'>
+						<div class='btn' @click="changeSelectGeneral()">换将</div>
+					</div>
+				</div>
+				<!-- 控制按钮：确认/取消/结束阶段 -->
+				<div v-if='judgeOpShow()' class='selectBtn'>
+					<p class='skillTitle'>{{room.skillTitle}}</p>
+					<input type="button" value="确认" @click='yes()'/>
+					<input type="button" value="取消" @click='no()'/>
+					<input v-if='judgeOpEnd()' type="button" value="结束阶段" @click='end()'/>
+				</div>
+			</menu>
+		</app>
+	</body>
+		<script src="index.js"></script>
+</html>

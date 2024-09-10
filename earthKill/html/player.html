@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="referrer" content="no-referrer" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+		<title>General Show</title>
+		<link rel="icon" href="../file/img/han.png" type="image/x-icon">
+		<script src='../js/common/jquery.lgwind.1.0.0.js'></script>
+		<script src='../js/common/alert.js'></script>
+		<style>
+			@font-face { 
+			  font-family: '楷体1';
+			  src: url('../file/font/kaiti.woff');
+			}
+			body {
+				background: #000000;
+			}
+			.general {
+			    display: inline-block;
+			    margin: 4px 4px;
+			}
+			.general .skin {
+			    display: inline-block;
+			    width: 110px;
+			    min-height: 128px;
+			    max-height: 128.47px;
+			    background: #eeeeee33;
+			    cursor: pointer;
+			}
+			.general name {
+			    position: absolute;
+			    color: rgb(255, 255, 255);
+			    opacity: 0.9;
+			    text-align: center;
+			    font-size: 16px;
+			    font-family: '楷体1';
+			    margin-top: -120px;
+			    width: 18px;
+			    min-height: 54px;
+			    text-shadow: rgb(205, 22, 22) 2px 2px 2px;
+			    cursor: pointer;
+			    display: flex;
+			    align-items: center;
+			    padding: 12px 2px;
+			    border-radius: 20px;
+			}
+			.general blood {
+			    display: flex;
+			}
+			.general blood img {
+			    width: 16px;
+			}
+			.general blood num {
+			    color: #519248;
+			    width: 16px;
+			}
+			win {
+				color: #ffffffaa;
+				font-size: 10px;
+			    position: absolute;
+			    margin-top: -18px;
+			    margin-left:74px;
+			    width : 36px;
+			    text-align: right;
+			}
+			@media all and (max-width: 650px) {
+				.general .skin {
+				    width: 105px;
+				    min-height: 122.18px;
+				    max-height: 122.18px;
+				}
+				win {
+				    margin-left:68px;
+			    	margin-top: -14px;
+				}
+				alert {
+					left : 0px !important;
+					right : 0px !important;
+					width: calc(100% - 40px) !important;
+				}
+				.general blood img {
+				    width: 14px;
+				}
+				.general blood num {
+				    width: 14px;
+				}
+			}
+			alert {
+				position: fixed !important;
+			}
+		</style>
+	</head>
+	<body>
+		<app></app>
+		<script src='player.js'></script>
+	</body>
+</html>
